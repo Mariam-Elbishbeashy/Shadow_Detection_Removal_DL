@@ -13,9 +13,9 @@ from tkinter import Tk, Button, Label, filedialog
 from PIL import Image, ImageTk
 
 # ================== CONFIG ==================
-IMAGE_SIZE = (224, 224)
+IMAGE_SIZE = (384, 512)  # (Height, Width)
 DATA_PATH = 'ISTD_Dataset/train'
-MODEL_PATH = 'shadow_model.h5'
+MODEL_PATH = 'shadow_model2.h5'
 selected_image_path = None
 model = None
 
@@ -33,8 +33,8 @@ def load_images(shadow_folder, mask_folder):
         mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 
         if image is not None and mask is not None:
-            image = cv2.resize(image, IMAGE_SIZE) / 255.0
-            mask = cv2.resize(mask, IMAGE_SIZE) / 255.0
+            image = cv2.resize(image, IMAGE_SIZE[::-1]) / 255.0  # (Width, Height)
+            mask = cv2.resize(mask, IMAGE_SIZE[::-1]) / 255.0
             mask = np.expand_dims(mask, axis=-1)
 
             X.append(image)
@@ -48,7 +48,6 @@ def dilated_conv_block(x, filters, dilation_rate):
     x = BatchNormalization()(x)
     return x
 
-# SE block
 def squeeze_excite_block(input_tensor, ratio=16):
     filters = input_tensor.shape[-1]
     se = GlobalAveragePooling2D()(input_tensor)
@@ -57,9 +56,8 @@ def squeeze_excite_block(input_tensor, ratio=16):
     se = Reshape((1, 1, filters))(se)
     return Multiply()([input_tensor, se])
 
-
 # ============ MODEL BUILDING FUNCTION ============
-def build_model(input_shape=(224, 224, 3)):
+def build_model(input_shape=(384, 512, 3)):
     base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
 
     for layer in base_model.layers:
@@ -77,28 +75,27 @@ def build_model(input_shape=(224, 224, 3)):
     ]
     x = base_model.output
 
-    # Multi-scale feature fusion with dilated convs
     x = dilated_conv_block(x, 512, dilation_rate=1)
     x = dilated_conv_block(x, 512, dilation_rate=2)
 
     for i, skip in zip([256, 128, 64, 32], reversed(skips)):
-        x = Conv2DTranspose(i, (2, 2), strides=(2, 2), padding='same')(x)  
+        x = Conv2DTranspose(i, (2, 2), strides=(2, 2), padding='same')(x)
         x = concatenate([x, skip])
         x = Conv2D(i, 3, activation='relu', padding='same')(x)
         x = BatchNormalization()(x)
-        x = squeeze_excite_block(x)  #  SE Block
+        x = squeeze_excite_block(x)
 
-    x = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same')(x)  #  final upsampling
+    x = Conv2DTranspose(16, (2, 2), strides=(2, 2), padding='same')(x)
     output = Conv2D(1, 1, activation='sigmoid')(x)
     return Model(inputs=inputs, outputs=output)
 
 # ============ RED OVERLAY FUNCTION ============
 def overlay_mask_on_image(original_img_path, predicted_mask):
     original = cv2.imread(original_img_path)
-    original = cv2.resize(original, IMAGE_SIZE)
+    original = cv2.resize(original, IMAGE_SIZE[::-1])
 
     if predicted_mask.shape != IMAGE_SIZE:
-        predicted_mask = cv2.resize(predicted_mask, IMAGE_SIZE)
+        predicted_mask = cv2.resize(predicted_mask, IMAGE_SIZE[::-1])
 
     red_mask = np.zeros_like(original)
     red_mask[:, :, 2] = 255
@@ -123,7 +120,6 @@ def choose_image():
         img_label.configure(image=img_tk)
         img_label.image = img_tk
 
-#metrics
 def dice_coefficient(y_true, y_pred):
     y_pred = tf.cast(y_pred > 0.5, tf.float32)
     y_true = tf.cast(y_true, tf.float32)
@@ -136,6 +132,11 @@ def iou_score(y_true, y_pred):
     intersection = tf.reduce_sum(y_true * y_pred)
     union = tf.reduce_sum(y_true) + tf.reduce_sum(y_pred) - intersection
     return (intersection + 1) / (union + 1)
+
+def weighted_bce(y_true, y_pred, weight=5.0):
+    bce = tf.keras.losses.binary_crossentropy(y_true, y_pred)
+    weights = 1 + (weight - 1) * y_true  # weight shadow pixels more
+    return tf.reduce_mean(bce * weights)
 
 def train_and_predict():
     global model, selected_image_path
@@ -150,7 +151,8 @@ def train_and_predict():
 
     if os.path.exists(MODEL_PATH):
         print("[INFO] Loading saved model...")
-        model = tf.keras.models.load_model(MODEL_PATH)
+        model = tf.keras.models.load_model(MODEL_PATH,
+                custom_objects={'dice_coefficient': dice_coefficient, 'iou_score': iou_score})
     else:
         print("[INFO] Training new model...")
         model = build_model()
@@ -164,11 +166,11 @@ def train_and_predict():
 #=========== Predict & Show ============
 def predict_and_show(image_path):
     image = cv2.imread(image_path)
-    resized = cv2.resize(image, IMAGE_SIZE) / 255.0
+    resized = cv2.resize(image, IMAGE_SIZE[::-1]) / 255.0
     input_tensor = np.expand_dims(resized, axis=0)
 
     pred_mask = model.predict(input_tensor)[0].squeeze()
-    pred_mask = (pred_mask > 0.5).astype(np.uint8) * 255
+    pred_mask = (pred_mask > 0.6).astype(np.uint8) * 255
 
     kernel = np.ones((5, 5), np.uint8)
     pred_mask = cv2.morphologyEx(pred_mask, cv2.MORPH_CLOSE, kernel)
