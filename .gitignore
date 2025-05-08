@@ -1,7 +1,5 @@
 venv/
 ISTD_Dataset/
-paper_shadow_model.h5
-paper2_shadow_model.h5
-small_size_shadow_model.h5
-shadow_model.h5
+shadow_model2_0850_K2S2E5_aug.h5
 shadow_model2.h5
+_pycache_/
