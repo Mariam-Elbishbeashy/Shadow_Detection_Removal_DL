@@ -1,60 +1,74 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
-def remove_shadow(image_path, thresholded_mask_resized):
+def compute_histogram_mapping(source, template):
+
+    s_values, bin_idx, s_counts = np.unique(source, return_inverse=True, return_counts=True)
+    t_values, t_counts = np.unique(template, return_counts=True)
+
+    # Compute normalized CDFs
+    s_quantiles = np.cumsum(s_counts).astype(np.float64)
+    s_quantiles /= s_quantiles[-1]
+
+    t_quantiles = np.cumsum(t_counts).astype(np.float64)
+    t_quantiles /= t_quantiles[-1]
+
+    interp_t_values = np.interp(s_quantiles, t_quantiles, t_values)
+    return interp_t_values[bin_idx]
+
+def remove_shadow(image_path, mask):
     original_img = cv2.imread(image_path)
-
     corrected_img = original_img.copy()
-    # Get the dimensions of corrected_img
     height, width, channels = corrected_img.shape
 
-    # Print the dimensions
-    print(f"Height: {height}, Width: {width}, Channels: {channels}")
-    thresholded_mask_resized = cv2.resize(
-        thresholded_mask_resized, (original_img.shape[1], original_img.shape[0]), interpolation=cv2.INTER_NEAREST
+    # Resize mask to match image
+    mask = cv2.resize(
+        mask, (width, height), interpolation=cv2.INTER_NEAREST
     )
 
-    shadow_pixels_r = original_img[thresholded_mask_resized[..., 0] == 0, 0]
-    shadow_pixels_g = original_img[thresholded_mask_resized[..., 0] == 0, 1]
-    shadow_pixels_b = original_img[thresholded_mask_resized[..., 0] == 0, 2]
+    # Shadow region mask
+    shadow_mask = mask[..., 0] != 0
 
-    mean_shadow_intensity_r = np.mean(shadow_pixels_r) / 255.0 if len(shadow_pixels_r) > 0 else 0.5
-    mean_shadow_intensity_g = np.mean(shadow_pixels_g) / 255.0 if len(shadow_pixels_g) > 0 else 0.5
-    mean_shadow_intensity_b = np.mean(shadow_pixels_b) / 255.0 if len(shadow_pixels_b) > 0 else 0.5
+    # Border region for reference (expanded shadow edge)
+    kernel = np.ones((25, 25), np.uint8)  # Larger kernel for smoother transition
+    dilated_mask = cv2.dilate(mask, kernel, iterations=1)
+    border_mask = cv2.subtract(dilated_mask, mask)[..., 0] > 0
+    
+    plt.imshow(cv2.cvtColor(dilated_mask, cv2.COLOR_BGR2RGB))
+    plt.title("Dilated Mask")
+    plt.axis('off')
+    plt.show()
+    border_mask_display = (border_mask.astype(np.uint8)) * 255
+    cv2.imshow("Border Mask", border_mask_display)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+    # Histogram match each color channel inside shadow to surrounding border
+    for c in range(3):  # For R, G, B channels
+        channel = original_img[..., c]
+        source_pixels = channel[shadow_mask].ravel()
+        template_pixels = channel[border_mask].ravel()
 
-    # Dynamic gamma adjustment based on shadow brightness for each channel
-    gamma_r = 0.2 + (1.0 - mean_shadow_intensity_r) * 0.8
-    gamma_g = 0.1 + (1.0 - mean_shadow_intensity_g) * 0.9
-    gamma_b = 0.1 + (1.0 - mean_shadow_intensity_b) * 0.9
+        if source_pixels.size == 0 or template_pixels.size == 0:
+            continue  # Skip empty masks
 
-    print(f"Gamma R: {gamma_r}, Gamma G: {gamma_g}, Gamma B: {gamma_b}")
+        matched = compute_histogram_mapping(source_pixels, template_pixels)
 
-    # Apply gamma correction separately for each channel
-    for i in range(width):
-        for j in range(height):
-            if thresholded_mask_resized[j, i, 0] == 0: 
-                corrected_img[j, i, 0] = 255
-                corrected_img[j, i, 1] = 255
-                corrected_img[j, i, 2] = 255
-            else:
-                corrected_img[j, i, 0] = np.power((corrected_img[j, i, 0] / 255), gamma_r) * 255
-                corrected_img[j, i, 1] = np.power((corrected_img[j, i, 1] / 255), gamma_g) * 255
-                corrected_img[j, i, 2] = np.power((corrected_img[j, i, 2] / 255), gamma_b) * 255
+        corrected_channel = corrected_img[..., c]
+        corrected_channel[shadow_mask] = np.clip(matched, 0, 255).astype(np.uint8)
+        corrected_img[..., c] = corrected_channel
 
-    # Restore background pixels as they are
-    for i in range(width):
-        for j in range(height):
-            if thresholded_mask_resized[j, i, 0] == 0: 
-                corrected_img[j, i, 0] = original_img[j, i, 0]
-                corrected_img[j, i, 1] = original_img[j, i, 1]
-                corrected_img[j, i, 2] = original_img[j, i, 2]
-
-     # Smooth edges using a Gaussian blur
-    mask = thresholded_mask_resized[..., 0]
-    blurred_mask = cv2.GaussianBlur(mask.astype(np.float32), (15, 15), 5)
-
-    for c in range(channels):
-        corrected_img[..., c] = (corrected_img[..., c] * blurred_mask / 255.0 +
-                                 original_img[..., c] * (1 - blurred_mask / 255.0)).astype(np.uint8)
+    # Edge blending with Gaussian-blurred mask
+    blend_strength = 1.0
+    binary_mask = (mask[..., 0] > 0).astype(np.float32)
+    alpha = cv2.bilateralFilter(binary_mask, d=9, sigmaColor=75, sigmaSpace=75)
+    alpha *= blend_strength
+    
+    for c in range(3):
+        corrected_img[..., c] = (
+            alpha * corrected_img[..., c] + (1.0 - alpha) * original_img[..., c]
+        ).astype(np.uint8)
+        corrected_img[..., c][border_mask] = original_img[..., c][border_mask] 
         
     return corrected_img
