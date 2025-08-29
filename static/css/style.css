@@ -1,0 +1,226 @@
+/* Navbar Styles */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.navbar-nav .dropdown-menu {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.navbar-nav .dropdown-item {
+    transition: background-color 0.2s ease;
+}
+
+/* Fixed navbar spacing */
+body {
+    padding-top: 20px; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container.mt-5.pt-4 {
+    flex: 1;
+}
+
+/* Footer Styles */
+footer {
+    margin-top: auto;
+}
+
+footer a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #fff !important;
+    text-decoration: underline;
+}
+
+/* Card Improvements */
+.card {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Form Styles */
+.form-control {
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 0.2rem rgba(74, 111, 165, 0.25);
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: 0.375rem;
+}
+
+/* Table Styles */
+.table {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+/* Image Preview Styles */
+.upload-placeholder {
+    border: 2px dashed #dee2e6;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+}
+
+.upload-placeholder:hover {
+    border-color: #4a6fa5;
+    background-color: rgba(74, 111, 165, 0.05);
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image-container img {
+    max-width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#changeImageBtn {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#changeImageBtn:hover {
+    opacity: 1;
+}
+
+/* Badge Styles */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar-nav {
+        padding-top: 1rem;
+    }
+    
+    .navbar-nav .nav-item {
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .action-buttons .btn {
+        margin: 0.1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .upload-placeholder {
+        padding: 2rem !important;
+    }
+    
+    body {
+        padding-top: 66px; /* Adjust for smaller navbar height on mobile */
+    }
+}
+
+/* Animation for alerts */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.alert.position-fixed {
+    animation: slideInRight 0.3s ease-out;
+}
+
+/* Custom colors */
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #166088;
+    --accent-color: #4cb1a7;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+

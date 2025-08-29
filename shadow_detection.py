@@ -321,4 +321,4 @@ overlay_label.grid(row=2, column=0, padx=10)
 removed_shadow_label = Label(root)  
 removed_shadow_label.grid(row=2, column=1, padx=10)
 
-root.mainloop()
+# root.mainloop()

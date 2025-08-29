@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container profile-container">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <div class="profile-card text-center">
+                     <div class="profile-avatar">
+                        <img src="{{ url_for('static', filename='uploads/avatars/' + current_user.avatar) if current_user.avatar else url_for('static', filename='images/default-avatar.png') }}" 
+                            alt="User Avatar" class="avatar-img" id="avatarPreview">
+                        <div class="avatar-overlay">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+
+                    <h4 class="profile-username">{{ current_user.username }}</h4>
+                    <p class="profile-email">{{ current_user.email }}</p>
+                    <p class="profile-join-date">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        Joined {{ current_user.created_at.strftime('%B %d, %Y') }}
+                    </p>
+                </div>
+
+                <div class="profile-nav">
+                    <div class="nav-header">Account Settings</div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#profile-info">
+                                <i class="fas fa-user me-2"></i>Profile Information
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#security">
+                                <i class="fas fa-shield-alt me-2"></i>Security
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#statistics">
+                                <i class="fas fa-chart-bar me-2"></i>Statistics
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="profile-content">
+                <!-- Header -->
+                <div class="profile-header">
+                    <h2>User Profile</h2>
+                    <p>Manage your account settings</p>
+                </div>
+
+                <!-- Profile Information Section -->
+                <section id="profile-info" class="profile-section">
+                    <div class="section-header">
+                        <h4><i class="fas fa-user me-2"></i>Profile Information</h4>
+                        <p>Update your personal information</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="username">Username</label>
+                                            <input type="text" class="form-control" id="username" 
+                                                   value="{{ current_user.username }}" disabled>
+                                            <small class="form-text text-muted">Username cannot be changed</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="email">Email Address</label>
+                                            <input type="email" class="form-control" id="email" 
+                                                   value="{{ current_user.email }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" 
+                                            placeholder="Enter first name" data-value="{{ current_user.first_name or '' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" 
+                                            placeholder="Enter last name" data-value="{{ current_user.last_name or '' }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="bio">Bio</label>
+                                    <textarea class="form-control" id="bio" rows="3" 
+                                            placeholder="Tell us about yourself" data-value="{{ current_user.bio or '' }}">{{ current_user.bio or '' }}</textarea>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-1"></i>Save Changes
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary ms-2">
+                                        <i class="fas fa-undo me-1"></i>Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Security Section -->
+                <section id="security" class="profile-section">
+                    <div class="section-header">
+                        <h4><i class="fas fa-shield-alt me-2"></i>Security</h4>
+                        <p>Manage your password</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="securityForm">
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password</label>
+                                    <input type="password" class="form-control" id="currentPassword" 
+                                           placeholder="Enter current password" required>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="newPassword">New Password</label>
+                                            <input type="password" class="form-control" id="newPassword" 
+                                                   placeholder="Enter new password" required>
+                                            <div class="password-strength mt-2">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                                </div>
+                                                <small class="password-strength-text">Password strength</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="confirmPassword">Confirm Password</label>
+                                            <input type="password" class="form-control" id="confirmPassword" 
+                                                   placeholder="Confirm new password" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-key me-1"></i>Update Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Statistics Section -->
+                <section id="statistics" class="profile-section">
+                    <div class="section-header">
+                        <h4><i class="fas fa-chart-bar me-2"></i>Statistics</h4>
+                        <p>Your usage statistics and activity</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-images"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3>{{ current_user.processed_images|length }}</h3>
+                                    <p>Total Images Processed</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card">
+                                <div class="stat-icon detection">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3>{{ current_user.processed_images|selectattr('process_type', 'equalto', 'detection')|list|length }}</h3>
+                                    <p>Shadow Detections</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card">
+                                <div class="stat-icon removal">
+                                    <i class="fas fa-magic"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3>{{ current_user.processed_images|selectattr('process_type', 'equalto', 'removal')|list|length }}</h3>
+                                    <p>Shadow Removals</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5>Recent Activity</h5>
+                            <div class="activity-timeline">
+                                {% if current_user.processed_images %}
+                                    {% for image in current_user.processed_images[:5] %}
+                                    <div class="activity-item">
+                                        <div class="activity-icon">
+                                            <i class="fas fa-{{ 'search' if image.process_type == 'detection' else 'magic' }}"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <p>
+                                                <strong>{{ image.process_type|title }} processing</strong> 
+                                                completed for {{ image.original_filename }}
+                                            </p>
+                                            <small class="text-muted">
+                                                {{ image.created_at.strftime('%Y-%m-%d at %H:%M') }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="text-muted">No recent activity</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

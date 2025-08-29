@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowRemove Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/documentation.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top doc-navbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-sun me-2"></i>
+                <span class="fw-bold">ShadowRemove Documentation</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i> Back to App
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#api">
+                            <i class="fas fa-code me-1"></i> API Reference
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid doc-container">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="sidebar-sticky">
+                    <div class="sidebar-header">
+                        <h5>ShadowRemove</h5>
+                        <p class="text-muted">v1.0.0</p>
+                    </div>
+
+                    <h6 class="sidebar-heading">
+                        <span>Getting Started</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#overview">
+                                <i class="fas fa-play-circle me-2"></i> Overview
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#installation">
+                                <i class="fas fa-download me-2"></i> Installation
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#quickstart">
+                                <i class="fas fa-forward me-2"></i> Quick Start
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading">
+                        <span>Features</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#shadow-detection">
+                                <i class="fas fa-search me-2"></i> Shadow Detection
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#shadow-removal">
+                                <i class="fas fa-magic me-2"></i> Shadow Removal
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#user-management">
+                                <i class="fas fa-users me-2"></i> User Management
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading">
+                        <span>Technical Details</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#architecture">
+                                <i class="fas fa-sitemap me-2"></i> System Architecture
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#api">
+                                <i class="fas fa-code me-2"></i> API Reference
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#models">
+                                <i class="fas fa-brain me-2"></i> AI Models
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#troubleshooting">
+                                <i class="fas fa-wrench me-2"></i> Troubleshooting
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="sidebar-footer">
+                        <p class="text-muted small">Need help?</p>
+                        <a href="#support" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="fas fa-question-circle me-1"></i> Support
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 main-content">
+                <!-- Overview Section -->
+                <section id="overview" class="doc-section">
+                    <div class="section-header">
+                        <h1>ShadowRemove Documentation</h1>
+                        <p class="lead">Advanced shadow detection and removal using AI technology</p>
+                    </div>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4>Shadow Detection</h4>
+                            <p>Advanced AI-powered shadow detection using deep learning models</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <h4>Shadow Removal</h4>
+                            <p>Seamless shadow removal with histogram matching and edge blending</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4>User Management</h4>
+                            <p>Secure user authentication and processing history tracking</p>
+                        </div>
+                    </div>
+
+                    <div class="doc-alert info">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>Quick Tip:</strong> The application works best with images that have clear lighting and distinct shadows.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation Section -->
+                <section id="installation" class="doc-section">
+                    <div class="section-header">
+                        <h2>Installation</h2>
+                        <p>Follow these steps to set up the ShadowRemove application on your system.</p>
+                    </div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Prerequisites</h4>
+                                <ul>
+                                    <li>Python 3.8 or higher</li>
+                                    <li>pip (Python package manager)</li>
+                                    <li>Git</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Clone the Repository</h4>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code>git clone https://github.com/yourusername/shadow-remove.git<br>cd shadow-remove</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Create Virtual Environment</h4>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code># Windows<br>python -m venv venv<br>venv\Scripts\activate<br><br># macOS/Linux<br>python3 -m venv venv<br>source venv/bin/activate</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Install Dependencies</h4>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code>pip install -r requirements.txt</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Initialize Database</h4>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code>python init_db.py</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <h4>Run the Application</h4>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code>python app.py</code>
+                                </div>
+                                <p class="mt-2">The application will be available at <code>http://localhost:5000</code></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Start Section -->
+                <section id="quickstart" class="doc-section">
+                    <h2>Quick Start Guide</h2>
+                    <p>Get started with ShadowRemove in just a few simple steps:</p>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Create an Account</h4>
+                                <p>Register for a new account or login if you already have one.</p>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code># Navigate to http://localhost:5000/signup<br># Fill in your details to create an account</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Upload an Image</h4>
+                                <p>Navigate to the Dashboard and select an image with shadows to process.</p>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code># Click "Select Image" button<br># Choose an image file from your device<br># Supported formats: JPG, PNG, JPEG</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Detect Shadows</h4>
+                                <p>Click "Detect Shadows" to identify shadow regions in your image.</p>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code># Click "Detect Shadows" button<br># Wait for processing to complete<br># View the detected shadow areas</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Remove Shadows</h4>
+                                <p>Click "Remove Shadows" to process the image and eliminate shadows.</p>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code># Click "Remove Shadows" button<br># Wait for processing to complete<br># View the shadow-free result</code>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Download Result</h4>
+                                <p>Download your processed image or view your processing history.</p>
+                                <div class="code-block">
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <code># Click "Download Result" button<br># Save the processed image<br># Or view history for all processed images</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Shadow Detection Section -->
+                <section id="shadow-detection" class="doc-section">
+                    <h2>Shadow Detection</h2>
+                    <p>The shadow detection system uses a deep learning model based on VGG16 architecture with custom modifications for shadow detection.</p>
+                    
+                    <h4>Technical Approach</h4>
+                    <p>The detection model uses:</p>
+                    <ul>
+                        <li>Transfer learning with VGG16 as base model</li>
+                        <li>Dilated convolutional blocks for larger receptive fields</li>
+                        <li>Squeeze-and-excitation blocks for channel-wise attention</li>
+                        <li>U-Net like architecture with skip connections</li>
+                    </ul>
+                    
+                    <h4>Model Architecture</h4>
+                    <div class="code-block">
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <code># Model building components<br>def build_model(input_shape=(384, 512, 3)):<br>&nbsp;&nbsp;&nbsp;&nbsp;base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)<br>&nbsp;&nbsp;&nbsp;&nbsp;# ... custom layers for shadow detection<br>&nbsp;&nbsp;&nbsp;&nbsp;return Model(inputs=inputs, outputs=output)</code>
+                    </div>
+                    
+                    <h4>Training Process</h4>
+                    <p>The model was trained on the ISTD dataset with data augmentation:</p>
+                    <ul>
+                        <li>Horizontal flipping</li>
+                        <li>Brightness adjustment</li>
+                        <li>Rotation</li>
+                        <li>Contrast changes</li>
+                    </ul>
+                </section>
+
+                <!-- Shadow Removal Section -->
+                <section id="shadow-removal" class="doc-section">
+                    <h2>Shadow Removal</h2>
+                    <p>The shadow removal algorithm uses histogram matching and edge blending to seamlessly remove shadows from images.</p>
+                    
+                    <h4>Algorithm Steps</h4>
+                    <ol>
+                        <li><strong>Shadow Mask Generation:</strong> Use the detection model to identify shadow regions</li>
+                        <li><strong>Border Region Identification:</strong> Identify transition areas around shadows</li>
+                        <li><strong>Histogram Matching:</strong> Adjust shadow region histograms to match border regions</li>
+                        <li><strong>Edge Blending:</strong> Smooth transitions between adjusted and original regions</li>
+                    </ol>
+                    
+                    <h4>Key Functions</h4>
+                    <div class="code-block">
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <code>def remove_shadow(image_path, mask):<br>&nbsp;&nbsp;&nbsp;&nbsp;# Read image and resize mask<br>&nbsp;&nbsp;&nbsp;&nbsp;# Identify shadow and border regions<br>&nbsp;&nbsp;&nbsp;&nbsp;# Apply histogram matching for each channel<br>&nbsp;&nbsp;&nbsp;&nbsp;# Blend edges for smooth transitions<br>&nbsp;&nbsp;&nbsp;&nbsp;return corrected_img</code>
+                    </div>
+                </section>
+
+                <!-- User Management Section -->
+                <section id="user-management" class="doc-section">
+                    <h2>User Management</h2>
+                    <p>The application includes a complete user authentication and management system.</p>
+                    
+                    <h4>Features</h4>
+                    <ul>
+                        <li>User registration and login</li>
+                        <li>Password hashing with Werkzeug</li>
+                        <li>Session management with Flask-Login</li>
+                        <li>Processing history tracking</li>
+                        <li>User-specific image storage</li>
+                    </ul>
+                    
+                    <h4>Database Schema</h4>
+                    <div class="code-block">
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <code>class User(UserMixin, db.Model):<br>&nbsp;&nbsp;&nbsp;&nbsp;id = db.Column(db.Integer, primary_key=True)<br>&nbsp;&nbsp;&nbsp;&nbsp;username = db.Column(db.String(80), unique=True, nullable=False)<br>&nbsp;&nbsp;&nbsp;&nbsp;email = db.Column(db.String(120), unique=True, nullable=False)<br>&nbsp;&nbsp;&nbsp;&nbsp;password_hash = db.Column(db.String(128))<br>&nbsp;&nbsp;&nbsp;&nbsp;created_at = db.Column(db.DateTime, default=datetime.utcnow)<br><br>class ProcessedImage(db.Model):<br>&nbsp;&nbsp;&nbsp;&nbsp;id = db.Column(db.Integer, primary_key=True)<br>&nbsp;&nbsp;&nbsp;&nbsp;user_id = db.Column(db.Integer, db.ForeignKey('user.id'))<br>&nbsp;&nbsp;&nbsp;&nbsp;original_filename = db.Column(db.String(255))<br>&nbsp;&nbsp;&nbsp;&nbsp;processed_filename = db.Column(db.String(255))<br>&nbsp;&nbsp;&nbsp;&nbsp;process_type = db.Column(db.String(50))<br>&nbsp;&nbsp;&nbsp;&nbsp;created_at = db.Column(db.DateTime, default=datetime.utcnow)</code>
+                    </div>
+                </section>
+
+                <!-- Architecture Section -->
+                <section id="architecture" class="doc-section">
+                    <h2>System Architecture</h2>
+                    <p>ShadowRemove follows a client-server architecture with the following components:</p>
+                    
+                    <h4>Frontend</h4>
+                    <ul>
+                        <li>HTML5/CSS3 with Bootstrap 5 for responsive design</li>
+                        <li>JavaScript for dynamic interactions</li>
+                        <li>AJAX for asynchronous processing requests</li>
+                    </ul>
+                    
+                    <h4>Backend</h4>
+                    <ul>
+                        <li>Flask web framework</li>
+                        <li>SQLAlchemy for database operations</li>
+                        <li>Flask-Login for authentication</li>
+                        <li>OpenCV and TensorFlow for image processing</li>
+                    </ul>
+                    
+                    <h4>File Structure</h4>
+                    <div class="code-block">
+                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <code>shadow-app/<br>├── app.py                 # Main application file<br>├── models.py              # Database models<br>├── shadow_detection.py    # Detection functions<br>├── shadow_removal.py      # Removal functions<br>├── requirements.txt       # Dependencies<br>├── init_db.py            # Database initialization<br>├── uploads/              # Uploaded images<br>├── results/              # Processed images<br>├── static/               # Static assets<br>│   ├── css/<br>│   ├── js/<br>│   └── images/<br>└── templates/            # HTML templates<br>    ├── base.html<br>    ├── index.html<br>    ├── login.html<br>    ├── signup.html<br>    ├── dashboard.html<br>    └── history.html</code>
+                    </div>
+                </section>
+
+                <!-- API Reference Section -->
+                <section id="api" class="doc-section">
+                    <h2>API Reference</h2>
+                    <p>The application provides RESTful API endpoints for image processing.</p>
+                    
+                    <h4>Authentication Endpoints</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Endpoint</th>
+                                <th>Method</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>/login</code></td>
+                                <td>GET, POST</td>
+                                <td>User login</td>
+                            </tr>
+                            <tr>
+                                <td><code>/signup</code></td>
+                                <td>GET, POST</td>
+                                <td>User registration</td>
+                            </tr>
+                            <tr>
+                                <td><code>/logout</code></td>
+                                <td>GET</td>
+                                <td>User logout</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>Processing Endpoints</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Endpoint</th>
+                                <th>Method</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>/detect</code></td>
+                                <td>POST</td>
+                                <td>Detect shadows in an image</td>
+                            </tr>
+                            <tr>
+                                <td><code>/remove</code></td>
+                                <td>POST</td>
+                                <td>Remove shadows from an image</td>
+                            </tr>
+                            <tr>
+                                <td><code>/history</code></td>
+                                <td>GET</td>
+                                <td>View processing history</td>
+                            </tr>
+                            <tr>
+                                <td><code>/view_image/&lt;int:image_id&gt;</code></td>
+                                <td>GET</td>
+                                <td>View a processed image</td>
+                            </tr>
+                            <tr>
+                                <td><code>/download_image/&lt;int:image_id&gt;</code></td>
+                                <td>GET</td>
+                                <td>Download a processed image</td>
+                            </tr>
+                            <tr>
+                                <td><code>/delete_image/&lt;int:image_id&gt;</code></td>
+                                <td>POST</td>
+                                <td>Delete a processed image</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Models Section -->
+                <section id="models" class="doc-section">
+                    <h2>AI Models</h2>
+                    <p>The application uses pre-trained deep learning models for shadow detection.</p>
+                    
+                    <h4>Model Details</h4>
+                    <ul>
+                        <li><strong>Base Model:</strong> VGG16 with ImageNet weights</li>
+                        <li><strong>Input Size:</strong> 384×512 pixels</li>
+                        <li><strong>Output:</strong> Binary mask of shadow regions</li>
+                        <li><strong>Training Dataset:</strong> ISTD (ISTD Dataset)</li>
+                    </ul>
+                    
+                    <h4>Performance Metrics</h4>
+                    <p>The model was evaluated using:</p>
+                    <ul>
+                        <li>Dice Coefficient: 0.85+</li>
+                        <li>IoU (Intersection over Union): 0.80+</li>
+                        <li>Accuracy: 95%+</li>
+                    </ul>
+                    
+                    <h4>Model Files</h4>
+                    <p>The application looks for the following model files:</p>
+                    <ul>
+                        <li><code>shadow_model2_0850_K2S2E5_aug.h5</code> - Pre-trained detection model</li>
+                        <li>If not found, the application will build and train a new model</li>
+                    </ul>
+                </section>
+
+                <!-- Troubleshooting Section -->
+                <section id="troubleshooting" class="doc-section">
+                    <h2>Troubleshooting</h2>
+                    <p>Common issues and their solutions:</p>
+                    
+                    <h4>Installation Issues</h4>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>TensorFlow installation fails</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Try installing a specific version compatible with your system:</p>
+                            <div class="code-block">
+                                <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <code>pip install tensorflow==2.13.0</code>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>Runtime Issues</h4>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Model not found error</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>The application will build a new model if the pre-trained model is not available. This may take several minutes.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>Memory errors with large images</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Resize very large images before uploading or increase your system's available memory.</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Performance Tips</h4>
+                    <ul>
+                        <li>Use images with reasonable dimensions (under 2000px on the longest side)</li>
+                        <li>Close other memory-intensive applications when processing large images</li>
+                        <li>For best results, use images with clear lighting and distinct shadows</li>
+                    </ul>
+                </section>
+
+                <!-- Support Section -->
+                <section id="support" class="doc-section">
+                    <h2>Support</h2>
+                    <p>If you need additional help with ShadowRemove, here are some resources:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <h5>Documentation</h5>
+                                    <p>Check our comprehensive documentation for detailed guides</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-body text-center">
+                                    <div class="feature-icon mx-auto mb-3">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <h5>Email Support</h5>
+                                    <p>Contact us at: support@shadowremove.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="doc-footer">
+                    <p>Need more help? <a href="#support">Contact our support team</a></p>
+                    <p class="text-muted">© 2025 ShadowRemove. All rights reserved.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/documentation.js"></script>  
+</body>
+</html>

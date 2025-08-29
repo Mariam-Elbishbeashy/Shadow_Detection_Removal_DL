@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Advanced Shadow Detection & Removal</h1>
+                <p class="lead">Upload images to detect and remove shadows with our AI-powered technology.</p>
+                {% if not current_user.is_authenticated %}
+                    <div class="mt-4">
+                        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg me-2">Get Started</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+                    </div>
+                {% else %}
+                    <div class="mt-4">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="Shadow Removal" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row">
+            <div class="col-md-4 text-center mb-4">
+                <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <i class="fas fa-upload fa-2x"></i>
+                </div>
+                <h4>1. Upload Image</h4>
+                <p>Upload your image with shadows through our simple interface.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <i class="fas fa-search fa-2x"></i>
+                </div>
+                <h4>2. Detect Shadows</h4>
+                <p>Our AI algorithm will detect shadows in your image.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <i class="fas fa-magic fa-2x"></i>
+                </div>
+                <h4>3. Remove Shadows</h4>
+                <p>Remove shadows and download your enhanced image.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+{% endblock %}

@@ -35,14 +35,14 @@ def remove_shadow(image_path, mask):
     dilated_mask = cv2.dilate(mask, kernel, iterations=1)
     border_mask = cv2.subtract(dilated_mask, mask)[..., 0] > 0
     
-    plt.imshow(cv2.cvtColor(dilated_mask, cv2.COLOR_BGR2RGB))
-    plt.title("Dilated Mask")
-    plt.axis('off')
-    plt.show()
-    border_mask_display = (border_mask.astype(np.uint8)) * 255
-    cv2.imshow("Border Mask", border_mask_display)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # plt.imshow(cv2.cvtColor(dilated_mask, cv2.COLOR_BGR2RGB))
+    # plt.title("Dilated Mask")
+    # plt.axis('off')
+    # plt.show()
+    # border_mask_display = (border_mask.astype(np.uint8)) * 255
+    # cv2.imshow("Border Mask", border_mask_display)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     
     # Histogram match each color channel inside shadow to surrounding border
     for c in range(3):  # For R, G, B channels
