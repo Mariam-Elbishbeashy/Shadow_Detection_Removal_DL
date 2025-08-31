@@ -12,6 +12,12 @@ from routes import profile_bp
 from models import db, User, ProcessedImage
 from shadow_detection import build_model, overlay_mask_on_image, dice_coefficient, iou_score
 from shadow_removal import remove_shadow
+from admin_route import (
+    admin_dashboard, admin_users, admin_user_detail, admin_activity,
+    admin_delete_image, admin_delete_user, admin_toggle_user_status,
+    admin_make_admin, admin_remove_admin, admin_system_stats
+)
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'  
@@ -24,6 +30,17 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024 
 app.register_blueprint(profile_bp)
 
+# Register admin routes
+app.add_url_rule('/admin', 'admin_dashboard', admin_dashboard)
+app.add_url_rule('/admin/users', 'admin_users', admin_users)
+app.add_url_rule('/admin/user/<int:user_id>', 'admin_user_detail', admin_user_detail)
+app.add_url_rule('/admin/activity', 'admin_activity', admin_activity)
+app.add_url_rule('/admin/delete_image/<int:image_id>', 'admin_delete_image', admin_delete_image, methods=['POST'])
+app.add_url_rule('/admin/delete_user/<int:user_id>', 'admin_delete_user', admin_delete_user, methods=['POST'])
+app.add_url_rule('/admin/toggle_user/<int:user_id>', 'admin_toggle_user_status', admin_toggle_user_status, methods=['POST'])
+app.add_url_rule('/admin/make_admin/<int:user_id>', 'admin_make_admin', admin_make_admin, methods=['POST'])
+app.add_url_rule('/admin/remove_admin/<int:user_id>', 'admin_remove_admin', admin_remove_admin, methods=['POST'])
+app.add_url_rule('/admin/stats', 'admin_system_stats', admin_system_stats)
 
 # Initialize extensions
 db.init_app(app)

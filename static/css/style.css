@@ -552,10 +552,15 @@ body {
     animation: none;
 }
 
-.text-muted{
+p.text-muted1{
     color: white !important;
 }
 
 p.lead.mb-4.text-muted{
     color: black !important;
 }
+
+p.lead.text-muted{
+    color: white !important;
+}
+

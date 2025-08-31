@@ -8,6 +8,149 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/profile.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        :root {
+            --primary: #0c255c;
+            --primary-dark: #0c1f53;
+            --secondary: #361969;
+            --accent: #0e97af;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #78889e;
+            --gray-light: #dfe3e9;
+            --white: #ffffff;
+            --navbar-dark: #0f172a;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+        
+        /* Navbar styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--navbar-dark) 0%, var(--dark) 100%) !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+            padding: 0.6rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--white) !important;
+        }
+        
+        .navbar-brand i {
+            color: var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg);
+        }
+        
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.85) !important;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 6px;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--white) !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .navbar-nav .nav-link i {
+            margin-right: 0.4rem;
+            font-size: 0.9rem;
+        }
+        
+        .navbar-nav .dropdown-menu {
+            background: var(--navbar-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+        
+        .navbar-nav .dropdown-item {
+            color: rgba(255, 255, 255, 0.85);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .navbar-nav .dropdown-item:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .dropdown-divider {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 极.2);
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='极 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        /* Profile dropdown styling */
+        .profile-picture {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-toggle::after {
+            margin-left: 0.5rem;
+        }
+        
+        .nav-item.dropdown:hover .profile-picture {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+        }
+        
+
+        /* Alert customization */
+        .alert {
+            border: none;
+            border-radius: 10px;
+        }
+        
+        /* Footer styling to match navbar */
+        footer {
+            background: linear-gradient(135deg, var(--navbar-dark) 0%, var(--dark极) 100%) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        footer a {
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <!-- Professional Navbar -->
@@ -34,16 +177,21 @@
                             <i class="fas fa-history me-1"></i> History
                         </a>
                     </li>
+
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                            <i class="fas fa-cog me-1"></i> Admin
+                        </a>
+                    </li>
+                    {% endif %}
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-info-circle me-1"></i> About
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('documentation') }}" style="color:black;">
-                                    <i class="fas fa-book me-1"></i> Documentation
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('documentation') }}"><i class="fas fa-book me-1"></i> Documentation</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-code me-1"></i> API</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle me-1"></i> Help</a></li>
@@ -54,14 +202,23 @@
                 <ul class="navbar-nav ms-auto">
                     {% if current_user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i> {{ current_user.username }}
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            {% if current_user.avatar and current_user.avatar != 'default-avatar.png' %}
+                                <img src="{{ url_for('static', filename='uploads/avatars/' + current_user.avatar) }}" class="profile-picture me-2" alt="Profile Picture">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" class="profile-picture me-2" alt="Default Profile">
+                            {% endif %}
+                            <span>{{ current_user.username }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user me-1"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-1"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
+
+                            {% if current_user.is_authenticated and current_user.is_admin %}
+                            <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}"><i class="fas fa-cog me-2"></i>Admin Panel</a></li>
+                            {% endif %}
+                            <!-- <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li> -->
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </li>
                     {% else %}
@@ -103,12 +260,15 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5>ShadowRemove</h5>
-                    <p>Advanced shadow detection and removal using AI technology.</p>
+                    <p>shadow detection and removal using AI technology.</p>
                 </div>
                 <div class="col-md-3">
                     <h5>Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ url_for('index') }}" class="text-light">Home</a></li>
+                        {% if current_user.is_authenticated and current_user.is_admin %}
+                            <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">Admin Panel</a></li>
+                        {% endif %}
                         <li><a href="{{ url_for('dashboard') }}" class="text-light">Dashboard</a></li>
                         <li><a href="{{ url_for('history') }}" class="text-light">History</a></li>
                     </ul>
@@ -116,8 +276,8 @@
                 <div class="col-md-3">
                     <h5>Contact</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-envelope me-2"></i> support@shadowremove.com</li>
-                        <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope me-2"></i> mariam2206043@miuegypt.edu.eg</li>
+                        <li><i class="fas fa-phone me-2"></i> +20 (100)190-7536</li>
                     </ul>
                 </div>
             </div>
@@ -129,6 +289,19 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = "0.4rem 0";
+                navbar.style.boxShadow = "0 4px 18px rgba(0, 0, 0, 0.2)";
+            } else {
+                navbar.style.padding = "0.6rem 0";
+                navbar.style.boxShadow = "0 4px 18px rgba(0, 0, 0, 0.15)";
+            }
+        });
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

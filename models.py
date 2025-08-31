@@ -16,6 +16,8 @@ class User(UserMixin, db.Model):
     avatar = db.Column(db.String(120), default='default-avatar.png')  
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    is_admin = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
