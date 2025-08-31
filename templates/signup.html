@@ -1,37 +1,174 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-body p-5">
-                <h2 class="card-title text-center mb-4">Create Account</h2>
-                <form method="POST" action="{{ url_for('signup') }}">
-                    <div class="mb-3">
+<div class="auth-container">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h2 class="mb-0">Create Account</h2>
+                <p class="opacity-90">Join us today</p>
+            </div>
+            
+            <div class="auth-body">
+                <form method="POST" action="{{ url_for('signup') }}" id="signupForm">
+                    <div class="form-group mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                        <input type="text" class="form-control" id="username" name="username" required 
+                               placeholder="Choose a username">
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                    
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required 
+                               placeholder="Enter your email">
                     </div>
-                    <div class="mb-3">
+                    
+                    <div class="form-group mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="password-toggle">
+                            <input type="password" class="form-control" id="password" name="password" required 
+                                   placeholder="Create a password" oninput="checkPasswordStrength()">
+                            <span class="password-toggle-icon" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="password-strength mt-2">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <small class="text-muted" id="passwordStrengthText">Password strength</small>
                     </div>
-                    <div class="mb-3">
+                    
+                    <div class="form-group mb-4">
                         <label for="confirm_password" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        <div class="password-toggle">
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required 
+                                   placeholder="Confirm your password">
+                            <span class="password-toggle-icon" onclick="togglePassword('confirm_password')">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
                     </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    
+                    <div class="form-group mb-3">
+                        <button type="submit" class="btn btn-auth">
+                            <i class="fas fa-user-plus me-2"></i> Create Account
+                        </button>
                     </div>
                 </form>
-                <div class="text-center mt-3">
-                    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="{{ url_for('login') }}" class="auth-link">Login here</a></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function togglePassword(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const icon = document.querySelector(`#${inputId} + .password-toggle-icon i`);
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+    
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+        
+        let strength = 0;
+        let tips = "";
+        
+        // Check password length
+        if (password.length >= 8) {
+            strength += 1;
+        } else {
+            tips += "Make the password at least 8 characters. ";
+        }
+        
+        // Check for mixed case
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+            strength += 1;
+        } else {
+            tips += "Use both lowercase and uppercase letters. ";
+        }
+        
+        // Check for numbers
+        if (password.match(/\d/)) {
+            strength += 1;
+        } else {
+            tips += "Include at least one number. ";
+        }
+        
+        // Check for special characters
+        if (password.match(/[^a-zA-Z\d]/)) {
+            strength += 1;
+        } else {
+            tips += "Include at least one special character. ";
+        }
+        
+        // Update strength bar
+        const strengthPercent = (strength / 4) * 100;
+        strengthBar.style.width = strengthPercent + '%';
+        
+        // Update colors and text
+        if (strength === 0) {
+            strengthBar.style.background = '#dc2626';
+            strengthText.textContent = "Very weak";
+            strengthText.className = "text-danger";
+        } else if (strength === 1) {
+            strengthBar.style.background = '#ea580c';
+            strengthText.textContent = "Weak";
+            strengthText.className = "text-warning";
+        } else if (strength === 2) {
+            strengthBar.style.background = '#ca8a04';
+            strengthText.textContent = "Fair";
+            strengthText.className = "text-warning";
+        } else if (strength === 3) {
+            strengthBar.style.background = '#65a30d';
+            strengthText.textContent = "Good";
+            strengthText.className = "text-success";
+        } else {
+            strengthBar.style.background = '#16a34a';
+            strengthText.textContent = "Strong";
+            strengthText.className = "text-success";
+        }
+    }
+    
+    // Add form validation
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+        }
+    });
+    
+    // Add focus effects
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+    });
+</script>
 {% endblock %}

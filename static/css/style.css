@@ -564,3 +564,11 @@ p.lead.text-muted{
     color: white !important;
 }
 
+a.btn.btn-outline-primary.btn-lg.px-4.py-3:hover{
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+}
+a.btn.btn-outline-primary.btn-lg.px-4.py-3{
+    border-color:  var(--primary);
+    color:  var(--primary);
+}
