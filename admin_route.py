@@ -1,8 +1,9 @@
-from flask import render_template, request, flash, redirect, url_for, abort
+from flask import render_template, request, flash, redirect, url_for, abort, send_file
 from flask_login import current_user, login_required
 from functools import wraps
 from datetime import datetime, timedelta
 from models import User, ProcessedImage
+import os
 
 def admin_required(f):
     @wraps(f)
@@ -77,6 +78,28 @@ def admin_users():
     users = users.paginate(page=page, per_page=per_page, error_out=False)
     
     return render_template('admin/users.html', users=users, search_query=search_query)
+
+@admin_required
+def admin_view_image(image_id):
+    """View processed image result - final corrected version"""
+    import os
+    from flask import send_file, abort, flash, redirect, url_for, current_app
+    
+    processed_image = ProcessedImage.query.get_or_404(image_id)
+    
+    # Check permission
+    if not current_user.is_admin and current_user.id != processed_image.user_id:
+        abort(403)
+    
+    if not processed_image.processed_filename:
+        flash('Processed image not found in database', 'error')
+        return redirect(request.referrer or url_for('admin_activity'))
+    
+    project_root = os.path.dirname(current_app.root_path)  
+    file_path = os.path.join(project_root, 'Shadow-Detection-Removal_DL', 'static','results', processed_image.processed_filename)
+    file_path = os.path.abspath(file_path)  
+    
+    return send_file(file_path, as_attachment=False)
 
 @admin_required
 def admin_user_detail(user_id):

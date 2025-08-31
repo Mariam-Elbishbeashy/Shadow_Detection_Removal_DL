@@ -31,8 +31,13 @@
                             <td>{{ user.id }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ url_for('static', filename='uploads/avatars/' + user.avatar) }}" 
-                                         class="rounded-circle me-2" width="32" height="32" alt="{{ user.username }}">
+                                    {% if user.avatar and user.avatar != 'default-avatar.png' %}
+                                        <img src="{{ url_for('static', filename='uploads/avatars/' + user.avatar) }}" 
+                                             class="rounded-circle me-2" width="32" height="32" alt="{{ user.username }}">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
+                                             class="rounded-circle me-2" width="32" height="32" alt="Default Avatar">
+                                    {% endif %}
                                     <div>
                                         <strong>{{ user.username }}</strong>
                                         <br>

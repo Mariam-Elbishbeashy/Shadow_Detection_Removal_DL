@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="help-container">
+    <div class="help-header">
+        <h1 class="display-4 fw-bold">How can we help you?</h1>
+        <p class="lead">Find answers to common questions and learn how to get the most out of ShadowRemove</p>
+<!--         
+        <div class="search-box mt-4">
+            <input type="text" class="form-control" placeholder="Search for help articles...">
+            <button class="btn"><i class="fas fa-search me-1"></i> Search</button>
+        </div> -->
+    </div>
+    
+    <!-- Help Categories -->
+    <div class="help-section">
+        <h2 class="help-section-title">Browse Help Categories</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>Getting Started</h3>
+                    <p>Learn how to set up your account and use ShadowRemove for the first time</p>
+                    <a href="#getting-started" class="btn btn-outline-primary">View Guides</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Account & Settings</h3>
+                    <p>Manage your account, update settings, and configure preferences</p>
+                    <a href="#account-settings" class="btn btn-outline-primary">View Guides</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Using ShadowRemove</h3>
+                    <p>Tips and techniques for getting the best results with our AI technology</p>
+                    <a href="#using-shadowremove" class="btn btn-outline-primary">View Guides</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Frequently Asked Questions -->
+    <div class="help-section" id="faqs">
+        <h2 class="help-section-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How does ShadowRemove's AI technology work?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>ShadowRemove uses advanced deep learning models trained on thousands of images to detect and remove shadows intelligently. Our AI analyzes the lighting, texture, and color patterns in your image to identify shadow regions and seamlessly blend them with the surrounding areas for a natural-looking result.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What image formats are supported?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>ShadowRemove supports all common image formats including JPG, JPEG, PNG, and WEBP. For best results, we recommend using high-quality images with a resolution between 1-10MP. The maximum file size allowed is 20MB.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does it take to process an image?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Processing time depends on the image size and complexity. Typically, images are processed within 10-30 seconds. Larger images or those with complex shadows may take up to a minute. You can monitor the progress in real-time on the dashboard.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is there a limit to how many images I can process?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Accounts can process unlimited images.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I get the best results with ShadowRemove?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>For optimal results:</p>
+                    <ul>
+                        <li>Use images with good lighting contrast</li>
+                        <li>Ensure shadows are clearly defined</li>
+                        <li>Avoid images with extremely complex shadows or overlapping objects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Support -->
+    <div class="help-section">
+        <h2 class="help-section-title">Still need help?</h2>
+        <p class="lead mb-4">Our support team is here to assist you</p>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Support</h3>
+                    <p>Send us a detailed message and we'll respond within 24 hours</p>
+                    <a href="mailto:support@shadowremove.com" class="btn btn-primary">Email Us</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Live Chat</h3>
+                    <p>Chat with our support team in real-time during business hours</p>
+                    <a href="#" class="btn btn-primary">Start Chat</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Knowledge Base</h3>
+                    <p>Browse our comprehensive documentation and tutorials</p>
+                    <a href="{{ url_for('documentation') }}" class="btn btn-primary">View Documentation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .help-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .help-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .search-box {
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .search-box input {
+        padding: 1rem 1.5rem;
+        border-radius: 50px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-box button {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        background: var(--accent);
+        border: none;
+        color: white;
+    }
+    
+    .category-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .category-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+    }
+    
+    .faq-item {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .faq-question {
+        background: var(--light);
+        padding: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .faq-answer {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    .faq-item.active .faq-answer {
+        max-height: 500px;
+        padding: 1.5rem;
+    }
+    
+    .contact-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .contact-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+    }
+    
+    .help-section {
+        margin-bottom: 3rem;
+    }
+    
+    .help-section-title {
+        position: relative;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .help-section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+</style>
+
+<script>
+    // FAQ accordion functionality
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            item.classList.toggle('active');
+            
+            const icon = question.querySelector('i');
+            if (item.classList.contains('active')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        });
+    });
+    
+    // Search functionality
+    const searchInput = document.querySelector('.search-box input');
+    const searchButton = document.querySelector('.search-box button');
+    
+    searchButton.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+    
+    function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        if (query) {
+            // In a real implementation, this would search through help articles
+            alert(`Searching for: ${query}\n\nThis would display relevant help articles in a real implementation.`);
+        }
+    }
+</script>
+{% endblock %}

@@ -344,14 +344,6 @@
                         <li>U-Net like architecture with skip connections</li>
                     </ul>
                     
-                    <h4>Model Architecture</h4>
-                    <div class="code-block">
-                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <code># Model building components<br>def build_model(input_shape=(384, 512, 3)):<br>&nbsp;&nbsp;&nbsp;&nbsp;base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)<br>&nbsp;&nbsp;&nbsp;&nbsp;# ... custom layers for shadow detection<br>&nbsp;&nbsp;&nbsp;&nbsp;return Model(inputs=inputs, outputs=output)</code>
-                    </div>
-                    
                     <h4>Training Process</h4>
                     <p>The model was trained on the ISTD dataset with data augmentation:</p>
                     <ul>
@@ -375,13 +367,6 @@
                         <li><strong>Edge Blending:</strong> Smooth transitions between adjusted and original regions</li>
                     </ol>
                     
-                    <h4>Key Functions</h4>
-                    <div class="code-block">
-                        <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <code>def remove_shadow(image_path, mask):<br>&nbsp;&nbsp;&nbsp;&nbsp;# Read image and resize mask<br>&nbsp;&nbsp;&nbsp;&nbsp;# Identify shadow and border regions<br>&nbsp;&nbsp;&nbsp;&nbsp;# Apply histogram matching for each channel<br>&nbsp;&nbsp;&nbsp;&nbsp;# Blend edges for smooth transitions<br>&nbsp;&nbsp;&nbsp;&nbsp;return corrected_img</code>
-                    </div>
                 </section>
 
                 <!-- User Management Section -->
@@ -398,13 +383,13 @@
                         <li>User-specific image storage</li>
                     </ul>
                     
-                    <h4>Database Schema</h4>
+                    <!-- <h4>Database Schema</h4>
                     <div class="code-block">
                         <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
                             <i class="fas fa-copy"></i>
                         </button>
                         <code>class User(UserMixin, db.Model):<br>&nbsp;&nbsp;&nbsp;&nbsp;id = db.Column(db.Integer, primary_key=True)<br>&nbsp;&nbsp;&nbsp;&nbsp;username = db.Column(db.String(80), unique=True, nullable=False)<br>&nbsp;&nbsp;&nbsp;&nbsp;email = db.Column(db.String(120), unique=True, nullable=False)<br>&nbsp;&nbsp;&nbsp;&nbsp;password_hash = db.Column(db.String(128))<br>&nbsp;&nbsp;&nbsp;&nbsp;created_at = db.Column(db.DateTime, default=datetime.utcnow)<br><br>class ProcessedImage(db.Model):<br>&nbsp;&nbsp;&nbsp;&nbsp;id = db.Column(db.Integer, primary_key=True)<br>&nbsp;&nbsp;&nbsp;&nbsp;user_id = db.Column(db.Integer, db.ForeignKey('user.id'))<br>&nbsp;&nbsp;&nbsp;&nbsp;original_filename = db.Column(db.String(255))<br>&nbsp;&nbsp;&nbsp;&nbsp;processed_filename = db.Column(db.String(255))<br>&nbsp;&nbsp;&nbsp;&nbsp;process_type = db.Column(db.String(50))<br>&nbsp;&nbsp;&nbsp;&nbsp;created_at = db.Column(db.DateTime, default=datetime.utcnow)</code>
-                    </div>
+                    </div> -->
                 </section>
 
                 <!-- Architecture Section -->
@@ -427,13 +412,13 @@
                         <li>OpenCV and TensorFlow for image processing</li>
                     </ul>
                     
-                    <h4>File Structure</h4>
+                    <!-- <h4>File Structure</h4>
                     <div class="code-block">
                         <button class="btn btn-sm btn-outline-secondary copy-btn" onclick="copyCode(this)">
                             <i class="fas fa-copy"></i>
                         </button>
                         <code>shadow-app/<br>├── app.py                 # Main application file<br>├── models.py              # Database models<br>├── shadow_detection.py    # Detection functions<br>├── shadow_removal.py      # Removal functions<br>├── requirements.txt       # Dependencies<br>├── init_db.py            # Database initialization<br>├── uploads/              # Uploaded images<br>├── results/              # Processed images<br>├── static/               # Static assets<br>│   ├── css/<br>│   ├── js/<br>│   └── images/<br>└── templates/            # HTML templates<br>    ├── base.html<br>    ├── index.html<br>    ├── login.html<br>    ├── signup.html<br>    ├── dashboard.html<br>    └── history.html</code>
-                    </div>
+                    </div> -->
                 </section>
 
                 <!-- API Reference Section -->

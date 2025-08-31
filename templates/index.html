@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 hero-content">
-                <h1 class="display-4 fw-bold mb-4">Advanced AI-Powered Shadow Detection & Removal</h1>
+                <h1 class="display-4 fw-bold mb-4"> AI-Powered Shadow Detection & Removal</h1>
                 <p class="lead mb-4 text-muted">Leverage cutting-edge deep learning technology to automatically detect and remove shadows from your images with unprecedented accuracy.</p>
                 {% if not current_user.is_authenticated %}
                     <div class="d-flex flex-wrap gap-3 mt-4">
@@ -21,7 +21,7 @@
                 {% endif %}
             </div>
             <div class="col-lg-6 hero-image">
-                <img src="{{ url_for('static', filename='images/hero-image.jpg') }}" alt="Shadow Removal Technology" class="img-fluid rounded-3 shadow-lg">
+                <img src="../static/images/shadowing.png" alt="Shadow Removal Technology" class="img-fluid rounded-3 shadow-lg">
             </div>
         </div>
     </div>

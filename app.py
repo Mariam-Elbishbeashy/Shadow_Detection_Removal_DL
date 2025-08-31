@@ -15,7 +15,7 @@ from shadow_removal import remove_shadow
 from admin_route import (
     admin_dashboard, admin_users, admin_user_detail, admin_activity,
     admin_delete_image, admin_delete_user, admin_toggle_user_status,
-    admin_make_admin, admin_remove_admin, admin_system_stats
+    admin_make_admin, admin_remove_admin, admin_system_stats, admin_view_image
 )
 
 
@@ -24,7 +24,7 @@ app.config['SECRET_KEY'] = 'your-secret-key-here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shadow_app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['RESULTS_FOLDER'] = 'results'
+app.config['RESULTS_FOLDER'] = os.path.join('static', 'results')
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads', 'avatars')
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024 
@@ -41,6 +41,8 @@ app.add_url_rule('/admin/toggle_user/<int:user_id>', 'admin_toggle_user_status',
 app.add_url_rule('/admin/make_admin/<int:user_id>', 'admin_make_admin', admin_make_admin, methods=['POST'])
 app.add_url_rule('/admin/remove_admin/<int:user_id>', 'admin_remove_admin', admin_remove_admin, methods=['POST'])
 app.add_url_rule('/admin/stats', 'admin_system_stats', admin_system_stats)
+app.add_url_rule('/admin_view_image/<int:image_id>', 'admin_view_image', admin_view_image)
+
 
 # Initialize extensions
 db.init_app(app)
@@ -64,6 +66,10 @@ def load_user(user_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/help')
+def help():
+    return render_template('help.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

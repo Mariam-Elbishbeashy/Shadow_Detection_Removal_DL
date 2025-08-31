@@ -454,3 +454,7 @@
     font-weight: 500;
     color: var(--dark-color);
 }
+
+.profile-section {
+    scroll-margin-top: 80px; 
+}

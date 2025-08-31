@@ -429,3 +429,9 @@ body {
 .sidebar-sticky::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
+
+.doc-section {
+    padding: 30px 0;
+    border-bottom: 1px solid #eee;
+    scroll-margin-top: 90px; 
+}
