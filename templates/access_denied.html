@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="access-container">
+                <div class="access-icon">
+                    <i class="fas fa-user-lock"></i>
+                </div>
+                <h1 class="access-title">Join Us to Continue</h1>
+                <p class="access-message">
+                    This content is available to registered users only. 
+                    Please sign up or login to access this feature.
+                </p>
+                
+                <div class="access-actions">
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Sign Up Now
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg ms-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    {% else %}
+                    <p class="text-muted">You're already logged in but don't have access to this content.</p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Return to Home
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <div class="access-benefits mt-4">
+                    <h5>Why join us?</h5>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="benefit-item">
+                                <i class="fas fa-magic benefit-icon"></i>
+                                <p>Shadow Removal</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="benefit-item">
+                                <i class="fas fa-history benefit-icon"></i>
+                                <p>Processing History</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="benefit-item">
+                                <i class="fas fa-cloud-upload-alt benefit-icon"></i>
+                                <p>Unlimited</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.access-container {
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+}
+
+.access-icon {
+    font-size: 4rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.access-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.access-message {
+    color: var(--gray);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.access-actions {
+    margin: 2rem 0;
+}
+
+.access-benefits {
+    border-top: 1px solid var(--border-color);
+    padding-top: 2rem;
+    margin-top: 2rem;
+}
+
+.access-benefits h5 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.benefit-item {
+    padding: 1rem;
+    text-align: center;
+}
+
+.benefit-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.benefit-item p {
+    color: var(--gray);
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .access-container {
+        padding: 2rem 1rem;
+    }
+    
+    .access-title {
+        font-size: 1.8rem;
+    }
+    
+    .access-actions .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .access-actions .btn:not(:last-child) {
+        margin-right: 0;
+        margin-left: 0;
+    }
+    
+    .benefit-item {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}

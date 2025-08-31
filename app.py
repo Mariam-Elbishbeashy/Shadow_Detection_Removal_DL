@@ -71,6 +71,10 @@ def index():
 def help():
     return render_template('help.html')
 
+@app.errorhandler(403)
+def access_denied(error):
+    return render_template('access_denied.html'), 403
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
