@@ -40,6 +40,8 @@ app.add_url_rule('/admin/delete_user/<int:user_id>', 'admin_delete_user', admin_
 app.add_url_rule('/admin/toggle_user/<int:user_id>', 'admin_toggle_user_status', admin_toggle_user_status, methods=['POST'])
 app.add_url_rule('/admin/make_admin/<int:user_id>', 'admin_make_admin', admin_make_admin, methods=['POST'])
 app.add_url_rule('/admin/remove_admin/<int:user_id>', 'admin_remove_admin', admin_remove_admin, methods=['POST'])
+app.add_url_rule('/admin/make_admin/<int:user_id>', 'admin_make_admin', admin_make_admin, methods=['POST'])
+app.add_url_rule('/admin/remove_admin/<int:user_id>', 'admin_remove_admin', admin_remove_admin, methods=['POST'])
 app.add_url_rule('/admin/stats', 'admin_system_stats', admin_system_stats)
 app.add_url_rule('/admin_view_image/<int:image_id>', 'admin_view_image', admin_view_image)
 

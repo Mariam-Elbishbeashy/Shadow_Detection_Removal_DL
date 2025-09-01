@@ -318,3 +318,42 @@ def admin_system_stats():
                          activity_data=activity_data,
                          process_types=process_types,
                          top_users=top_users)
+
+
+@admin_required
+def admin_make_admin(user_id):
+    from app import db  
+    if current_user.id == user_id:
+        flash('You cannot modify your own admin status', 'error')
+        return redirect(url_for('admin_users'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    try:
+        user.is_admin = True
+        db.session.commit()
+        flash(f'User {user.username} is now an administrator', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error updating user admin status: {str(e)}', 'error')
+    
+    return redirect(request.referrer or url_for('admin_users'))
+
+@admin_required
+def admin_remove_admin(user_id):
+    from app import db  
+    if current_user.id == user_id:
+        flash('You cannot remove your own admin privileges', 'error')
+        return redirect(url_for('admin_users'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    try:
+        user.is_admin = False
+        db.session.commit()
+        flash(f'Admin privileges removed from {user.username}', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error updating user admin status: {str(e)}', 'error')
+    
+    return redirect(request.referrer or url_for('admin_users'))

@@ -6,14 +6,94 @@
         <h1 class="h2">User Details: {{ user.username }}</h1>
         <div>
             <a href="{{ url_for('admin_users') }}" class="btn btn-outline-secondary">Back to Users</a>
+            
+            <!-- Admin Status Toggle Buttons -->
             {% if not user.is_admin %}
-            <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="POST" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger" 
-                        onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                <button type="button" class="btn btn-outline-primary ms-2" 
+                        data-bs-toggle="modal" data-bs-target="#makeAdminModal">
+                    Make Admin
+                </button>
+            {% else %}
+                {% if current_user.id != user.id %}
+                    <button type="button" class="btn btn-outline-warning ms-2" 
+                            data-bs-toggle="modal" data-bs-target="#removeAdminModal">
+                        Remove Admin
+                    </button>
+                {% endif %}
+            {% endif %}
+            
+            {% if not user.is_admin %}
+                <button type="button" class="btn btn-outline-danger ms-2" 
+                        data-bs-toggle="modal" data-bs-target="#deleteUserModal">
                     Delete User
                 </button>
-            </form>
             {% endif %}
+        </div>
+    </div>
+
+    <!-- Make Admin Modal -->
+    <div class="modal fade" id="makeAdminModal" tabindex="-1" aria-labelledby="makeAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="makeAdminModalLabel">Make User Admin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to make <strong>{{ user.username }}</strong> an administrator?</p>
+                    <p class="text-muted">This user will gain full access to the admin dashboard and all administrative functions.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ url_for('admin_make_admin', user_id=user.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remove Admin Modal -->
+    <div class="modal fade" id="removeAdminModal" tabindex="-1" aria-labelledby="removeAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="removeAdminModalLabel">Remove Admin Privileges</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove admin privileges from <strong>{{ user.username }}</strong>?</p>
+                    <p class="text-muted">This user will lose access to all administrative functions.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ url_for('admin_remove_admin', user_id=user.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-warning">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete user <strong>{{ user.username }}</strong>?</p>
+                    <p class="text-danger">This action cannot be undone. All user data and processed images will be permanently deleted.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Delete User</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -49,6 +129,7 @@
                         <div class="col-6 mt-2">
                             {{ user.last_name or 'Not set' }}
                         </div>
+                        
                         <div class="col-6 mt-2">
                             <strong>Joined:</strong>
                         </div>
@@ -64,6 +145,17 @@
                                 <span class="badge bg-danger">Admin</span>
                             {% else %}
                                 <span class="badge bg-success">User</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-6 mt-2">
+                            <strong>Active:</strong>
+                        </div>
+                        <div class="col-6 mt-2">
+                            {% if user.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inactive</span>
                             {% endif %}
                         </div>
                     </div>
@@ -120,12 +212,32 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <form action="{{ url_for('admin_delete_image', image_id=image.id) }}" method="POST" class="d-inline">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                                    onclick="return confirm('Are you sure you want to delete this image?')">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" data-bs-target="#deleteImageModal{{ image.id }}">
+                                            Delete
+                                        </button>
+                                        
+                                        <!-- Delete Image Modal -->
+                                        <div class="modal fade" id="deleteImageModal{{ image.id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Delete Image</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to delete this image?</p>
+                                                        <p class="text-muted">{{ image.original_filename }}</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <form action="{{ url_for('admin_delete_image', image_id=image.id) }}" method="POST" class="d-inline">
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
