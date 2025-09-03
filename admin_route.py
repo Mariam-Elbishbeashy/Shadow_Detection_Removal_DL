@@ -29,7 +29,7 @@ def admin_dashboard():
     
     # Get recent activity (last 10)
     recent_activity = ProcessedImage.query.order_by(ProcessedImage.created_at.desc()).limit(10).all()
-
+    
     # Get statistics
     total_users = User.query.count()
     total_processed = ProcessedImage.query.count()
