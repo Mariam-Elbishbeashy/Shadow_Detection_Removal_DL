@@ -16,7 +16,7 @@ def admin_required(f):
 @admin_required
 def admin_dashboard():
     from app import db  
-    users = User.query.all()
+    users = User.query.order_by(User.created_at.desc()).all()
     users_data = []
     for user in users:
         processed_count = ProcessedImage.query.filter_by(user_id=user.id).count()

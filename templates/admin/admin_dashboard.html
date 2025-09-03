@@ -12,7 +12,7 @@
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card bg-primary text-white">
                 <div class="card-body">
                     <h5 class="card-title">Total Users</h5>
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card bg-success text-white">
                 <div class="card-body">
                     <h5 class="card-title">Total Processed</h5>
@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card bg-info text-white">
                 <div class="card-body">
                     <h5 class="card-title">Today's Processed</h5>
@@ -36,14 +36,23 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Weekly Processed</h5>
+                    <h2 class="display-4">{{ weekly_processed }}</h2>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Recent Users -->
+    <!-- Recent Users and Activity -->
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Recent Users</h5>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Users</h5>
+                    <span class="badge bg-primary">{{ users_data|length }} total</span>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -53,11 +62,11 @@
                                     <th>User</th>
                                     <th>Joined</th>
                                     <th>Processed</th>
-                                    <th>Last Activity</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for data in users_data[:5] %}
+                                {% for data in users_data[:4] %}
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -76,12 +85,12 @@
                                         </div>
                                     </td>
                                     <td>{{ data.user.created_at.strftime('%Y-%m-%d') }}</td>
-                                    <td>{{ data.processed_count }}</td>
+                                    <td><span class="badge bg-secondary">{{ data.processed_count }}</span></td>
                                     <td>
-                                        {% if data.last_activity %}
-                                            {{ data.last_activity.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                        {% if data.user.is_admin %}
+                                            <span class="badge bg-danger">Admin</span>
                                         {% else %}
-                                            Never
+                                            <span class="badge bg-success">User</span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -89,7 +98,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{ url_for('admin_users') }}" class="btn btn-sm btn-outline-primary">View All Users</a>
+                    {% if users_data|length > 4 %}
+                    <div class="text-center mt-3">
+                        <p class="text-muted mb-2">Showing 4 of {{ users_data|length }} users</p>
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-sm btn-primary">View All Users</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -97,28 +111,74 @@
         <!-- Recent Activity -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Recent Activity</h5>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Activity</h5>
+                    <span class="badge bg-primary">{{ recent_activity|length }} total</span>
                 </div>
                 <div class="card-body">
-                    <div class="list-group">
-                        {% for activity in recent_activity %}
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>{{ activity.user.username }}</strong>
-                                    <span class="badge bg-{{ 'primary' if activity.process_type == 'detection' else 'success' }}">
-                                        {{ activity.process_type | title }}
-                                    </span>
-                                    <br>
-                                    <small class="text-muted">{{ activity.original_filename }}</small>
-                                </div>
-                                <small>{{ activity.created_at.strftime('%H:%M') }}</small>
-                            </div>
-                        </div>
-                        {% endfor %}
+                    {% if recent_activity %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Type</th>
+                                    <th>File</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for activity in recent_activity[:4] %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if activity.user.avatar and activity.user.avatar != 'default-avatar.png' %}
+                                                <img src="{{ url_for('static', filename='uploads/avatars/' + activity.user.avatar) }}" 
+                                                    class="rounded-circle me-2" width="32" height="32" alt="{{ activity.user.username }}">
+                                            {% else %}
+                                                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
+                                                    class="rounded-circle me-2" width="32" height="32" alt="Default Avatar">
+                                            {% endif %}
+                                            <div>
+                                                <strong>{{ activity.user.username }}</strong>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'primary' if activity.process_type == 'detection' else 'success' }}">
+                                            {{ activity.process_type | title }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ activity.original_filename|truncate(20) }}</small>
+                                    </td>
+                                    <td>
+                                        <small>{{ activity.created_at.strftime('%m/%d %H:%M') }}</small>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('admin_view_image', image_id=activity.id) }}" 
+                                           class="btn btn-sm btn-outline-primary" target="_blank">View</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    <a href="{{ url_for('admin_activity') }}" class="btn btn-sm btn-outline-primary mt-3">View All Activity</a>
+                    
+                    {% if recent_activity|length > 4 %}
+                    <div class="text-center mt-3">
+                        <p class="text-muted mb-2">Showing 4 of {{ recent_activity|length }} activities</p>
+                        <a href="{{ url_for('admin_activity') }}" class="btn btn-sm btn-primary">View All Activities</a>
+                    </div>
+                    {% endif %}
+                    
+                    {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted">No recent activity found.</p>
+                        <a href="{{ url_for('admin_activity') }}" class="btn btn-sm btn-outline-primary">View Activity Log</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
