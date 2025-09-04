@@ -7,6 +7,8 @@ import uuid
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from routes import profile_bp
+from tensorflow.keras.models import load_model
+import os, requests
 
 # Import models and functions
 from models import db, User, ProcessedImage
@@ -45,6 +47,21 @@ app.add_url_rule('/admin/remove_admin/<int:user_id>', 'admin_remove_admin', admi
 app.add_url_rule('/admin/stats', 'admin_system_stats', admin_system_stats)
 app.add_url_rule('/admin_view_image/<int:image_id>', 'admin_view_image', admin_view_image)
 
+# Force CPU (avoid CUDA errors)
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
+MODEL_PATH = "utils/shadow_model2_0850_K2S2E5_aug.h5"
+MODEL_URL= "https://drive.google.com/file/d/1TQYO8QbcG2HfD3uuRc0gfefDJo4HjWv6/view?usp=sharing"
+
+# Download model if not exists
+if not os.path.exists(MODEL_PATH):
+    print("Downloading model from Google Drive...")
+    os.makedirs("utils", exist_ok=True)
+    r = requests.get(MODEL_URL, allow_redirects=True)
+    with open(MODEL_PATH, "wb") as f:
+        f.write(r.content)
+
+model = load_model(MODEL_PATH)
 
 # Initialize extensions
 db.init_app(app)
