@@ -10,7 +10,8 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
 # from tkinter import Tk, Button, Label, filedialog, messagebox
-from PIL import Image, ImageTk
+from PIL import Image 
+# from PIL import ImageTk
 from shadow_removal import remove_shadow
 
 # ================== CONFIG ==================
@@ -148,14 +149,14 @@ def overlay_mask_on_image(original_img_path, predicted_mask):
     return overlay
 
 # ============ GUI CALLBACKS ============
-def choose_image():
-    global selected_image_path, img_label
-    # selected_image_path = filedialog.askopenfilename(filetypes=[("Image Files", ".png;.jpg;*.jpeg")])
-    if selected_image_path:
-        img = Image.open(selected_image_path).resize((640, 480))
-        img_tk = ImageTk.PhotoImage(img)
-        img_label.configure(image=img_tk)
-        img_label.image = img_tk
+# def choose_image():
+#     global selected_image_path, img_label
+#     # selected_image_path = filedialog.askopenfilename(filetypes=[("Image Files", ".png;.jpg;*.jpeg")])
+#     if selected_image_path:
+#         img = Image.open(selected_image_path).resize((640, 480))
+#         img_tk = ImageTk.PhotoImage(img)
+#         img_label.configure(image=img_tk)
+#         img_label.image = img_tk
 
 # ========== Metrics ============
 def dice_coefficient(y_true, y_pred):
