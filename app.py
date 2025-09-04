@@ -48,7 +48,8 @@ app.add_url_rule('/admin/stats', 'admin_system_stats', admin_system_stats)
 app.add_url_rule('/admin_view_image/<int:image_id>', 'admin_view_image', admin_view_image)
 
 # Force CPU (avoid CUDA errors)
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1" 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 MODEL_PATH = "utils/shadow_model2_0850_K2S2E5_aug.h5"
 MODEL_URL = "https://drive.google.com/uc?id=1TQYO8QbcG2HfD3uuRc0gfefDJo4HjWv6&export=download"
@@ -474,4 +475,4 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
