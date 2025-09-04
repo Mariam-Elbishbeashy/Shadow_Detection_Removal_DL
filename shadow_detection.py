@@ -9,7 +9,7 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow as tf
-from tkinter import Tk, Button, Label, filedialog, messagebox
+# from tkinter import Tk, Button, Label, filedialog, messagebox
 from PIL import Image, ImageTk
 from shadow_removal import remove_shadow
 
@@ -150,7 +150,7 @@ def overlay_mask_on_image(original_img_path, predicted_mask):
 # ============ GUI CALLBACKS ============
 def choose_image():
     global selected_image_path, img_label
-    selected_image_path = filedialog.askopenfilename(filetypes=[("Image Files", ".png;.jpg;*.jpeg")])
+    # selected_image_path = filedialog.askopenfilename(filetypes=[("Image Files", ".png;.jpg;*.jpeg")])
     if selected_image_path:
         img = Image.open(selected_image_path).resize((640, 480))
         img_tk = ImageTk.PhotoImage(img)
@@ -269,56 +269,56 @@ def predict_and_show(image_path):
 
     overlay_result = overlay_mask_on_image(image_path, pred_mask)
 
-    mask_img = Image.fromarray(pred_mask).convert("L").resize((640, 480))
-    mask_tk = ImageTk.PhotoImage(mask_img)
-    output_label.configure(image=mask_tk)
-    output_label.image = mask_tk
+    # mask_img = Image.fromarray(pred_mask).convert("L").resize((640, 480))
+    # mask_tk = ImageTk.PhotoImage(mask_img)
+    # output_label.configure(image=mask_tk)
+    # output_label.image = mask_tk
 
-    overlay_img = Image.fromarray(cv2.cvtColor(overlay_result, cv2.COLOR_BGR2RGB)).resize((640, 480))
-    overlay_tk = ImageTk.PhotoImage(overlay_img)
-    overlay_label.configure(image=overlay_tk)
-    overlay_label.image = overlay_tk
+    # overlay_img = Image.fromarray(cv2.cvtColor(overlay_result, cv2.COLOR_BGR2RGB)).resize((640, 480))
+    # overlay_tk = ImageTk.PhotoImage(overlay_img)
+    # overlay_label.configure(image=overlay_tk)
+    # overlay_label.image = overlay_tk
 
 
-def remove_shadows_button():
-    if not selected_image_path:
-        messagebox.showerror("Error", "Please select an image first.")
-        return
+# def remove_shadows_button():
+#     if not selected_image_path:
+#         messagebox.showerror("Error", "Please select an image first.")
+#         return
 
-    pred_mask = cv2.imread('predicted_mask.png')
-    if pred_mask is None:
-        messagebox.showerror("Error", "Shadow mask not found.")
-        return
+#     pred_mask = cv2.imread('predicted_mask.png')
+#     if pred_mask is None:
+#         messagebox.showerror("Error", "Shadow mask not found.")
+#         return
 
-    result = remove_shadow(selected_image_path, pred_mask)
-    output_path = "shadow_removed_image.jpg"
-    cv2.imwrite(output_path, result)
+#     result = remove_shadow(selected_image_path, pred_mask)
+#     output_path = "shadow_removed_image.jpg"
+#     cv2.imwrite(output_path, result)
 
-    result_rgb = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
-    img = Image.fromarray(result_rgb)
-    img = ImageTk.PhotoImage(img)
+#     result_rgb = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+#     img = Image.fromarray(result_rgb)
+#     img = ImageTk.PhotoImage(img)
 
-    removed_shadow_label.config(image=img)
-    removed_shadow_label.image = img
+#     removed_shadow_label.config(image=img)
+#     removed_shadow_label.image = img
 
 # ============ GUI SETUP ============
-root = Tk()
-root.title("Shadow Detection")
+# root = Tk()
+# root.title("Shadow Detection")
 
-Button(root, text="Choose Image", command=choose_image, padx=10, pady=5).grid(row=0, column=0, padx=10)
-Button(root, text="Train & Predict", command=train_and_predict, padx=10, pady=5).grid(row=0, column=1, padx=0)
-Button(root, text="Remove Shadows", command=remove_shadows_button, padx=10, pady=5).grid(row=0, column=2, padx=10)
+# Button(root, text="Choose Image", command=choose_image, padx=10, pady=5).grid(row=0, column=0, padx=10)
+# Button(root, text="Train & Predict", command=train_and_predict, padx=10, pady=5).grid(row=0, column=1, padx=0)
+# Button(root, text="Remove Shadows", command=remove_shadows_button, padx=10, pady=5).grid(row=0, column=2, padx=10)
 
-img_label = Label(root)
-img_label.grid(row=1, column=0, padx=10)
+# img_label = Label(root)
+# img_label.grid(row=1, column=0, padx=10)
 
-output_label = Label(root)
-output_label.grid(row=1, column=1, padx=10)
+# output_label = Label(root)
+# output_label.grid(row=1, column=1, padx=10)
 
-overlay_label= Label(root)
-overlay_label.grid(row=2, column=0, padx=10)
+# overlay_label= Label(root)
+# overlay_label.grid(row=2, column=0, padx=10)
 
-removed_shadow_label = Label(root)  
-removed_shadow_label.grid(row=2, column=1, padx=10)
+# removed_shadow_label = Label(root)  
+# removed_shadow_label.grid(row=2, column=1, padx=10)
 
 # root.mainloop()
