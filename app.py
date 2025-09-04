@@ -51,7 +51,7 @@ app.add_url_rule('/admin_view_image/<int:image_id>', 'admin_view_image', admin_v
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 MODEL_PATH = "utils/shadow_model2_0850_K2S2E5_aug.h5"
-MODEL_URL= "https://drive.google.com/file/d/1TQYO8QbcG2HfD3uuRc0gfefDJo4HjWv6/view?usp=sharing"
+MODEL_URL = "https://drive.google.com/uc?id=1TQYO8QbcG2HfD3uuRc0gfefDJo4HjWv6&export=download"
 
 # Download model if not exists
 if not os.path.exists(MODEL_PATH):
