@@ -7,7 +7,6 @@ import uuid
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from routes import profile_bp
-from tensorflow.keras.models import load_model
 import os, requests
 
 # Import models and functions
@@ -61,8 +60,6 @@ if not os.path.exists(MODEL_PATH):
     r = requests.get(MODEL_URL, allow_redirects=True)
     with open(MODEL_PATH, "wb") as f:
         f.write(r.content)
-
-model = load_model(MODEL_PATH)
 
 # Initialize extensions
 db.init_app(app)
@@ -383,7 +380,7 @@ def download_image(image_id):
 
 # ================== HELPER FUNCTIONS ==================
 
-def load_model():
+def load_shadow_model():
     global model
     if model is None:
         try:
@@ -410,8 +407,8 @@ def load_model():
 
 def detect_shadows_web(image_path):
     # Load the model
-    model = load_model()
-    
+    model = load_shadow_model()
+
     # Read and preprocess the image
     image = cv2.imread(image_path)
     original_size = image.shape[:2]  # Store original size
@@ -471,7 +468,7 @@ def init_db():
     with app.app_context():
         db.create_all()
         # Pre-load the model when the app starts
-        load_model()
+        load_shadow_model()
 
 if __name__ == '__main__':
     init_db()
