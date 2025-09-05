@@ -214,6 +214,7 @@ def api_docs():
 @app.route('/detect', methods=['POST'])
 @login_required
 def detect():
+    print("[DEBUG] /detect endpoint triggered 🚀")
     if 'image' not in request.files:
         return jsonify({'error': 'No image provided'}), 400
     
@@ -385,9 +386,9 @@ def load_shadow_model():
     global model
     if model is None:
         try:
-            # Try to load the pre-trained model
             import tensorflow as tf
             model_path = 'utils/shadow_model2_0850_K2S2E5_aug.h5'
+            print(f"[DEBUG] Attempting to load model from {model_path}")
             if os.path.exists(model_path):
                 model = tf.keras.models.load_model(
                     model_path,
@@ -396,13 +397,12 @@ def load_shadow_model():
                         'iou_score': iou_score
                     }
                 )
-                print("Model loaded successfully")
+                print("[DEBUG] Model loaded successfully ✅")
             else:
-                # Build a new model if pre-trained doesn't exist
-                print("Pre-trained model not found, building new model...")
+                print("[DEBUG] Model not found ❌ -> Building new model")
                 model = build_model()
         except Exception as e:
-            print(f"Error loading model: {e}")
+            print(f"[DEBUG] Error loading model: {e}")
             model = build_model()
     return model
 
@@ -444,6 +444,10 @@ def detect_shadows_web(image_path):
     
     # Create overlay
     overlay = overlay_mask_on_image(image_path, pred_mask)
+
+    print("[DEBUG] Input tensor shape:", input_tensor.shape)
+    print("[DEBUG] Input min:", np.min(input_tensor), "max:", np.max(input_tensor))
+    print("[DEBUG] Prediction stats:", np.min(pred_mask), np.max(pred_mask), np.mean(pred_mask))
     
     return overlay, pred_mask
 
