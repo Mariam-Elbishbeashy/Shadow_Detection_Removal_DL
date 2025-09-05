@@ -54,13 +54,13 @@ MODEL_PATH = "utils/shadow_model2_0850_K2S2E5_aug.h5"
 MODEL_URL = "https://drive.google.com/uc?id=1TQYO8QbcG2HfD3uuRc0gfefDJo4HjWv6"
 
 # After defining MODEL_PATH and MODEL_URL
-if not os.path.exists(MODEL_PATH):
+if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) < 1024*100:  
     import gdown
     print("Downloading model from Google Drive with gdown...")
     os.makedirs("utils", exist_ok=True)
     gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
     print("Model downloaded successfully ✅")
-
+    print("Model size:", os.path.getsize(MODEL_PATH), "bytes")
     
 # Initialize extensions
 db.init_app(app)
@@ -381,7 +381,6 @@ def download_image(image_id):
     )
 
 # ================== HELPER FUNCTIONS ==================
-
 def load_shadow_model():
     global model
     if model is None:
@@ -390,6 +389,7 @@ def load_shadow_model():
             model_path = 'utils/shadow_model2_0850_K2S2E5_aug.h5'
             print(f"[DEBUG] Attempting to load model from {model_path}")
             if os.path.exists(model_path):
+                print("[DEBUG] Model file size:", os.path.getsize(model_path), "bytes")
                 model = tf.keras.models.load_model(
                     model_path,
                     custom_objects={
