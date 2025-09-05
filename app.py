@@ -386,7 +386,7 @@ def load_shadow_model():
         try:
             # Try to load the pre-trained model
             import tensorflow as tf
-            model_path = 'shadow_model2_0850_K2S2E5_aug.h5'
+            model_path = 'utils/shadow_model2_0850_K2S2E5_aug.h5'
             if os.path.exists(model_path):
                 model = tf.keras.models.load_model(
                     model_path,
