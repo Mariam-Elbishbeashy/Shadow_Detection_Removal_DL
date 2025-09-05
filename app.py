@@ -53,14 +53,15 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 MODEL_PATH = "utils/shadow_model2_0850_K2S2E5_aug.h5"
 MODEL_URL = "https://drive.google.com/uc?id=1TQYO8QbcG2HfD3uuRc0gfefDJo4HjWv6&export=download"
 
-# Download model if not exists
+# After defining MODEL_PATH and MODEL_URL
 if not os.path.exists(MODEL_PATH):
     print("Downloading model from Google Drive...")
     os.makedirs("utils", exist_ok=True)
     r = requests.get(MODEL_URL, allow_redirects=True)
     with open(MODEL_PATH, "wb") as f:
         f.write(r.content)
-
+    print("Model downloaded successfully")
+    
 # Initialize extensions
 db.init_app(app)
 login_manager = LoginManager()
