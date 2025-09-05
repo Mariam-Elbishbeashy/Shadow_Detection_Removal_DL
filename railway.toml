@@ -3,6 +3,4 @@ builder = "NIXPACKS"
 
 [phases.setup]
 aptPkgs = ["git", "git-lfs"]
-
-[phases.build]
 cmds = ["git lfs install", "git lfs pull"]
