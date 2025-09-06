@@ -14,9 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtn = document.getElementById('downloadBtn');
     const processingInfo = document.getElementById('processingInfo');
     
+    // Size constraints
+    const MAX_WIDTH = 640;
+    const MAX_HEIGHT = 480;
+    const MIN_WIDTH = 100;
+    const MIN_HEIGHT = 100;
+    
     // Variables
     let uploadedFile = null;
     let currentMode = null;
+    let imageWidth = 0;
+    let imageHeight = 0;
     
     // Event Listeners
     selectImageBtn.addEventListener('click', () => fileInput.click());
@@ -43,57 +51,117 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadedFile = file;
         const reader = new FileReader();
         reader.onload = function(e) {
-            // Show preview
-            previewImage.src = e.target.result;
-            
-            // Update UI
-            uploadPlaceholder.classList.add('d-none');
-            imagePreviewSection.classList.remove('d-none');
-            
-            // Display image info
-            displayImageInfo(file);
-            
-            // Clear previous results
-            clearResults();
-            
-            // Enable detection button
-            detectBtn.disabled = false;
-            processingInfo.classList.remove('d-none');
-            
-            showNotification('Image uploaded successfully', 'success');
+            // Create image to get dimensions
+            const img = new Image();
+            img.onload = function() {
+                imageWidth = img.width;
+                imageHeight = img.height;
+                
+                // Validate image dimensions
+                const validationResult = validateImageDimensions(imageWidth, imageHeight);
+                if (!validationResult.isValid) {
+                    showNotification(validationResult.message, 'warning');
+                    // Still show preview but disable processing
+                    showImagePreview(e.target.result, file, false);
+                    return;
+                }
+                
+                // Show preview and enable processing
+                showImagePreview(e.target.result, file, true);
+                
+                if (validationResult.warning) {
+                    showNotification(validationResult.warning, 'info');
+                }
+            };
+            img.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
     
+    function validateImageDimensions(width, height) {
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+            return {
+                isValid: false,
+                message: `Image is too large (${width}×${height}). Maximum allowed: ${MAX_WIDTH}×${MAX_HEIGHT}px.`
+            };
+        }
+        
+        if (width < MIN_WIDTH || height < MIN_HEIGHT) {
+            return {
+                isValid: false,
+                message: `Image is too small (${width}×${height}). Minimum required: ${MIN_WIDTH}×${MIN_HEIGHT}px.`
+            };
+        }
+        
+        // Check if image is relatively small and might have quality issues
+        if (width < 300 || height < 300) {
+            return {
+                isValid: true,
+                warning: `Note: Image is relatively small (${width}×${height}px). Results may have lower quality.`
+            };
+        }
+        
+        return { isValid: true };
+    }
+    
+    function showImagePreview(imageSrc, file, enableProcessing) {
+        // Show preview
+        previewImage.src = imageSrc;
+        
+        // Update UI
+        uploadPlaceholder.classList.add('d-none');
+        imagePreviewSection.classList.remove('d-none');
+        
+        // Display image info
+        displayImageInfo(file);
+        
+        // Clear previous results
+        clearResults();
+        
+        // Enable/disable detection button based on validation
+        detectBtn.disabled = !enableProcessing;
+        processingInfo.classList.remove('d-none');
+        
+        if (enableProcessing) {
+            showNotification('Image uploaded successfully', 'success');
+        }
+    }
+    
     function displayImageInfo(file) {
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        img.onload = function() {
-            const fileSize = formatFileSize(file.size);
-            const dimensions = `${img.width} × ${img.height} pixels`;
-            const format = file.type.split('/')[1].toUpperCase();
-            
-            imageInfoContent.innerHTML = `
-                <div class="d-flex justify-content-between mb-1">
-                    <span>Name:</span>
-                    <span>${file.name}</span>
-                </div>
-                <div class="d-flex justify-content-between mb-1">
-                    <span>Size:</span>
-                    <span>${fileSize}</span>
-                </div>
-                <div class="d-flex justify-content-between mb-1">
-                    <span>Dimensions:</span>
-                    <span>${dimensions}</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <span>Format:</span>
-                    <span>${format}</span>
-                </div>
-            `;
-            
-            URL.revokeObjectURL(img.src);
-        };
+        const fileSize = formatFileSize(file.size);
+        const dimensions = `${imageWidth} × ${imageHeight} pixels`;
+        const format = file.type.split('/')[1].toUpperCase();
+        
+        // Add dimension validation status
+        let dimensionStatus = '';
+        if (imageWidth > MAX_WIDTH || imageHeight > MAX_HEIGHT) {
+            dimensionStatus = '<span class="text-danger">❌ Too large</span>';
+        } else if (imageWidth < MIN_WIDTH || imageHeight < MIN_HEIGHT) {
+            dimensionStatus = '<span class="text-danger">❌ Too small</span>';
+        } else if (imageWidth < 300 || imageHeight < 300) {
+            dimensionStatus = '<span class="text-warning">⚠️ Low resolution</span>';
+        } else {
+            dimensionStatus = '<span class="text-success">✅ Good</span>';
+        }
+        
+        imageInfoContent.innerHTML = `
+            <div class="d-flex justify-content-between mb-1">
+                <span>Name:</span>
+                <span>${file.name}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+                <span>Size:</span>
+                <span>${fileSize}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+                <span>Dimensions:</span>
+                <span>${dimensions} ${dimensionStatus}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>Format:</span>
+                <span>${format}</span>
+            </div>
+        `;
     }
     
     function formatFileSize(bytes) {
@@ -105,6 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function clearImage() {
         fileInput.value = '';
         uploadedFile = null;
+        imageWidth = 0;
+        imageHeight = 0;
         uploadPlaceholder.classList.remove('d-none');
         imagePreviewSection.classList.add('d-none');
         clearResults();
@@ -124,6 +194,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function detectShadows() {
         if (!uploadedFile) return;
+        
+        // Double-check dimensions before processing
+        const validationResult = validateImageDimensions(imageWidth, imageHeight);
+        if (!validationResult.isValid) {
+            showNotification(validationResult.message, 'error');
+            return;
+        }
         
         currentMode = 'detection';
         
@@ -177,6 +254,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function removeShadows() {
         if (!uploadedFile) return;
+        
+        // Double-check dimensions before processing
+        const validationResult = validateImageDimensions(imageWidth, imageHeight);
+        if (!validationResult.isValid) {
+            showNotification(validationResult.message, 'error');
+            return;
+        }
         
         currentMode = 'removal';
         
@@ -273,6 +357,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function showNotification(message, type) {
+        // Remove any existing notifications first
+        document.querySelectorAll('.alert.position-fixed').forEach(alert => {
+            alert.remove();
+        });
+        
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
